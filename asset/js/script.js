@@ -1,5 +1,6 @@
 var startBtn = document.querySelector(".start-btn");
 // Created initial Start button to begin quiz
+// Defining variables
 var startBtnContainer = document.querySelector(".start-btn-container");
 var questionsContainer = document.querySelector(".questions-container");
 var timerContainer = document.getElementById("times");
@@ -8,7 +9,7 @@ var timeLeftEl = document.getElementById("timeLeft");
 var questionIndex = 0;
 
 var score = 0;
-var time = 200;
+var time = 130;
 // Created multiple choice questions
 var questions = [
   {
@@ -66,14 +67,17 @@ var questions = [
     choices: ["Germany", "United States", "Australia", "Ireland"],
     correct: "Germany",
   },
+ 
+  
 ];
-
+// Defining start quiz function which hides button and displays first question and starts the timer
 function startQuiz() {
   startBtnContainer.classList.add("hide");
   startTimer();
   displayQuestions();
 }
 
+// Defining timer function,setting an interval to subtract 1 from time variable every 1000 ms
 function startTimer() {
   timerContainer.classList.remove("hide");
   timeLeftEl.textContent = time;
@@ -82,13 +86,14 @@ function startTimer() {
     time--;
     timeLeftEl.textContent = time;
 
+    // Checking to see if time is up or questions are exhausted and if so then calling quiz ends function
     if (time === 0 || questionIndex > questions.length - 1) {
       clearInterval(timerInterval);
       endQuiz();
     }
   }, 1000);
 }
-
+// This defines the function for ending the quiz based on above criteria
 function endQuiz() {
   var nameInput = document.createElement("input");
   nameInput.setAttribute("placeholder", "What is your name?");
@@ -96,6 +101,7 @@ function endQuiz() {
   submit.textContent = "SUBMIT";
   questionsContainer.append(nameInput, submit);
 
+//  Listening for submit button click, defining user data and sending that data to local storage then sending user to highscores page
   submit.addEventListener("click", function() {
     var user = {
         name: nameInput.value,
@@ -114,6 +120,7 @@ function endQuiz() {
   
 }
 
+// This function is being used to display questions based on our questions index variable
 function displayQuestions() {
   questionsContainer.textContent = "";
   if (questionIndex > questions.length - 1) {
@@ -129,6 +136,7 @@ function displayQuestions() {
     btn.textContent = questions[questionIndex].choices[i];
     choicesUl.append(btn);
 
+    // Added event listener to check to see if what was clicked on is correct answer, then incrementing our question index to display next question in array.
     btn.addEventListener("click", function (event) {
       if (event.target.textContent === questions[0].correct) {
         console.log("correct");
@@ -145,5 +153,5 @@ function displayQuestions() {
   questionsContainer.append(quizQuestion);
   questionsContainer.append(choicesUl);
 }
-
+// This is the event listener to begin the quiz
 startBtn.addEventListener("click", startQuiz);
